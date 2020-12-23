@@ -1,0 +1,16 @@
+{
+    "name": "emt-discord-bot",
+    "version": "1.0.0",
+    "description": "Discord activity monitoring bot which stores useful data about statistics ",
+    "author": "Carlos Amores",
+    "license": "GNU AGPLv3",
+    "dependencies": {
+        "@types/lodash": "^4.14.165",
+        "lodash": "^4.17.20",
+        "@types/node": "^14.14.0",
+        "fs-readdir-recursive": "^1.1.0",
+        "discord.js": "^12.4.0",
+        "mysql": "^2.18.1",
+        "@types/mysql": "^2.15.16"
+    }
+}
