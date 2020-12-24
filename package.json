@@ -3,14 +3,23 @@
     "version": "1.0.0",
     "description": "Discord activity monitoring bot which stores useful data about statistics ",
     "author": "Carlos Amores",
-    "license": "GNU AGPLv3",
+    "license": "AGPL-3.0-or-later",
+    "repository": {
+        "url": "https://github.com/elttuercas/emt-discord-bot"
+    },
     "dependencies": {
         "@types/lodash": "^4.14.165",
         "lodash": "^4.17.20",
         "@types/node": "^14.14.0",
         "fs-readdir-recursive": "^1.1.0",
         "discord.js": "^12.4.0",
-        "mysql": "^2.18.1",
-        "@types/mysql": "^2.15.16"
+        "mysql2": "^2.2.5",
+        "sequelize": "^6.3.5",
+        "@types/sequelize": "^4.28.9",
+        "sequelize-typescript": "2.0.0-beta.1",
+        "reflect-metadata": "^0.1.13"
+    },
+    "devDependencies": {
+        "sequelize-cli": "^6.2.0"
     }
 }

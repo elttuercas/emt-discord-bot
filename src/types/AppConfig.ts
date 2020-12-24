@@ -20,4 +20,11 @@ export default class AppConfig
     // Private config values.
 
     public token : string;
+    public mysql_settings : {
+        host : string,
+        port : number,
+        user : string,
+        password : string,
+        database : string
+    };
 }

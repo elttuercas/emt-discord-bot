@@ -25,7 +25,7 @@ import CommandFile  from '../types/CommandFile';
  * @author Carlos Amores
  * {@link https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-message}
  */
-export function handleEvent(client : Discord.Client, config : AppConfig, cmdObj : { [key : string] : CommandFile }, message : Discord.Message) : void
+export async function handleEvent(client : Discord.Client, config : AppConfig, cmdObj : { [key : string] : CommandFile }, message : Discord.Message) : Promise<void>
 {
     if (message.author.bot)
     {
@@ -38,8 +38,8 @@ export function handleEvent(client : Discord.Client, config : AppConfig, cmdObj 
     {
         if (message.content.startsWith(config.prefix + k))
         {
-            commandName = k;
             isCommand   = true;
+            commandName = k;
             return false;
         }
     });
@@ -47,7 +47,7 @@ export function handleEvent(client : Discord.Client, config : AppConfig, cmdObj 
     if (isCommand)
     {
         let cmdArgs : Array<string> = message.content.substr(config.prefix.length + commandName.length).split(/\s/);
-        cmdObj[commandName].run(client, message, ...cmdArgs);
+        cmdObj[commandName].run(client, message, ...cmdArgs).catch(console.error);
     }
     else
     {

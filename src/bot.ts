@@ -10,19 +10,40 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord from 'discord.js';
-import * as fs      from 'fs';
-import * as _       from 'lodash';
-import mysql        from 'mysql';
-import AppConfig    from './types/AppConfig';
-import EventFile    from './types/EventFile';
-import CommandFile  from './types/CommandFile';
+import * as Discord    from 'discord.js';
+import * as fs         from 'fs';
+import * as _          from 'lodash';
+import {Sequelize}     from 'sequelize-typescript';
+import AppConfig       from './types/AppConfig';
+import EventFile       from './types/EventFile';
+import CommandFile     from './types/CommandFile';
+import {VoiceActivity} from './models/VoiceActivity';
 
 const fsReadRecursive = require('fs-readdir-recursive');
-
 const client           = new Discord.Client();
+
+// Initialise object and populate.
 let config : AppConfig = new AppConfig();
 _.extend(config, require('../config.json'), require('../private_config.json'));
+
+// Create database connection.
+const sql : Sequelize = new Sequelize(
+    {
+        database: config.mysql_settings.database,
+        dialect : 'mysql',
+        username: config.mysql_settings.user,
+        password: config.mysql_settings.password,
+        port    : config.mysql_settings.port,
+        pool    : {
+            max: 10,
+            min: 0,
+            idle: 10000
+        },
+        models  : [
+            __dirname + '/models/*.ts',
+        ]
+    },
+);
 
 let commandsObj : { [key : string] : CommandFile } = {};
 _.each(fsReadRecursive('./commands/'), function (file : string)
@@ -32,7 +53,7 @@ _.each(fsReadRecursive('./commands/'), function (file : string)
         return;
     }
 
-    let commandName : string = file.substr(0, file.length - 3).replace('/', '.');
+    let commandName : string = file.substr(0, file.length - 3).replace('/', config.prefix);
     commandsObj[commandName] = require('./commands/' + file);
 });
 
@@ -56,8 +77,6 @@ _.each(fs.readdirSync('./events/'), function (file : string)
     delete require.cache[require.resolve('./events/' + file)];
 });
 
-client.login(config.token)
-    .then(function (v : string)
-          {
-              console.dir('Logged in!');
-          });
+// Login and ensure the database is in a known state.
+client.login(config.token).catch(console.error);
+VoiceActivity.sync().catch(console.error);

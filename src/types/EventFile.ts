@@ -11,7 +11,7 @@ import AppConfig    from './AppConfig';
  */
 export default interface EventFile
 {
-    handleEvent : (client : Discord.Client, config : AppConfig, ...args : any) => void,
+    handleEvent : (client : Discord.Client, config : AppConfig, ...args : any) => Promise<void>,
 
     [key : string] : any
 }
