@@ -24,7 +24,7 @@ const client           = new Discord.Client();
 
 // Initialise object and populate with the combination of private config values and public config values.
 let config : AppConfig = new AppConfig();
-_.extend(config, require('../config.json'), require('../private_config.json'));
+_.extend(config, require('../config.json'), require('../private-config.json'));
 
 // Create database connection.
 const sql : Sequelize = new Sequelize(

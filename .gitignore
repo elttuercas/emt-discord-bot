@@ -2,4 +2,4 @@
 node_modules
 *.js
 *.map
-private_config.json
+private-config.json

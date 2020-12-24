@@ -10,7 +10,7 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 RUN chmod +x /bot/src/wait-for-it.sh
 
 COPY ./config.json /bot
-COPY ./private_config.json /bot
+COPY ./private-config.json /bot
 
 WORKDIR /bot/src
 CMD ["node", "bot.js"]

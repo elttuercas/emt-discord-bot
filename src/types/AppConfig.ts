@@ -18,6 +18,7 @@ export default class AppConfig
 
     public prefix : string;
     public debug_mode : boolean;
+    public untracked_voice_channels : Array<string>;
     // Private config values.
 
     public token : string;

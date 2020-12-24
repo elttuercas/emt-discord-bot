@@ -1,4 +1,5 @@
 {
     "prefix": ".",
-    "debug_mode": false
+    "debug_mode": false,
+    "untracked_voice_channels": []
 }
