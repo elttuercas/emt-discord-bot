@@ -1,3 +1,5 @@
+import * as Discord from 'discord.js';
+
 /**
  * Class AppConfig
  *
@@ -18,7 +20,7 @@ export default class AppConfig
 
     public prefix : string;
     public debug_mode : boolean;
-    public untracked_voice_channels : Array<string>;
+    public untracked_voice_channels : Array<Discord.Snowflake>;
     // Private config values.
 
     public token : string;

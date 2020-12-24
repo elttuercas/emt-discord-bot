@@ -20,14 +20,14 @@ import CommandFile     from './types/CommandFile';
 import {VoiceActivity} from './models/VoiceActivity';
 
 const fsReadRecursive = require('fs-readdir-recursive');
-const client           = new Discord.Client();
+const client          = new Discord.Client();
 
 // Initialise object and populate with the combination of private config values and public config values.
 let config : AppConfig = new AppConfig();
 _.extend(config, require('../config.json'), require('../private-config.json'));
 
 // Create database connection.
-const sql : Sequelize = new Sequelize(
+new Sequelize(
     {
         database: config.mysql_settings.database,
         dialect : 'mysql',
@@ -35,11 +35,12 @@ const sql : Sequelize = new Sequelize(
         password: config.mysql_settings.password,
         port    : config.mysql_settings.port,
         pool    : {
-            max: 10,
-            min: 0,
-            idle: 10000
+            max : 10,
+            min : 0,
+            idle: 10000,
         },
-        models  : ['./models/*.ts']
+        models  : [__dirname + '/models/*.ts'],
+        logging: false
     },
 );
 
