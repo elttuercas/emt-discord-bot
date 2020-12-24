@@ -17,6 +17,7 @@ export default class AppConfig
     // Public config values.
 
     public prefix : string;
+    public debug_mode : boolean;
     // Private config values.
 
     public token : string;
