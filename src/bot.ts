@@ -18,6 +18,7 @@ import AppConfig       from './types/AppConfig';
 import EventFile       from './types/EventFile';
 import CommandFile     from './types/CommandFile';
 import {VoiceActivity} from './models/VoiceActivity';
+import {GuildMember}   from './models/GuildMember';
 
 const fsReadRecursive = require('fs-readdir-recursive');
 const client          = new Discord.Client();
@@ -78,4 +79,5 @@ _.each(fs.readdirSync('./events/'), function (file : string)
 
 // Login and ensure the database is in a known state.
 client.login(config.token).catch(console.error);
+GuildMember.sync().catch(console.error);
 VoiceActivity.sync().catch(console.error);

@@ -10,9 +10,10 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord  from 'discord.js';
-import {GuildMember} from '../../models/GuildMember';
-import * as _        from 'lodash';
+import * as Discord    from 'discord.js';
+import * as _          from 'lodash';
+import {GuildMember}   from '../../models/GuildMember';
+import {VoiceActivity} from '../../models/VoiceActivity';
 
 /**
  * Refreshes the
@@ -23,34 +24,68 @@ import * as _        from 'lodash';
  */
 export async function run(client : Discord.Client, msg : Discord.Message) : Promise<void>
 {
-    GuildMember
-        .destroy(
-            {
-                where: {
-                    guild_id: msg.guild.id,
-                },
-            },
-        )
-        .then(function ()
+    // Load all voice logs as they are going to be deleted upon deletion of all guild member records.
+    VoiceActivity
+        .findAll()
+        .then(function (voiceLogs : Array<VoiceActivity>)
         {
-            let guildMemberDefArr : Array<{ guild_id : Discord.Snowflake, discord_id : Discord.Snowflake, discord_name : string }> = [];
-            // @ts-ignore This is legitimately the same as cache.forEach with the same callback fn params and that
-            // doesn't cause an error.
-            _.each(msg.guild.members.cache, function (v : Discord.GuildMember)
+            // Create an array of objects which can be used to recreate the voice logs after their deletion.
+            let voiceLogCp : Array<{
+                id : bigint,
+                discord_id : Discord.Snowflake,
+                discord_name : string,
+                channel_id : Discord.Snowflake,
+                channel_name : string,
+                start_va_ts : Date,
+                end_va_ts : Date
+            }> = [];
+            /*
+             * This may seem illogical given that there already is an array of VoiceActivity objects which can be used
+             * to recreate the records which are going to be lost. However, the internal structure of the object does
+             * not match the structure required by bulkCreate as it is more of a wrapper around the real data therefore
+             * it needs to be accessed and retrieved manually.
+             */
+            _.each(voiceLogs, function (v : VoiceActivity)
             {
-                if (v.user.bot)
-                {
-                    return;
-                }
-
-                guildMemberDefArr.push(
+                voiceLogCp.push(
                     {
-                        guild_id    : msg.guild.id,
-                        discord_id  : v.id,
-                        discord_name: v.user.tag,
+                        id          : v.id,
+                        discord_id  : v.discord_id,
+                        discord_name: v.discord_name,
+                        channel_id  : v.channel_id,
+                        channel_name: v.channel_name,
+                        start_va_ts : v.start_va_ts,
+                        end_va_ts   : v.end_va_ts,
                     },
                 );
             });
-            GuildMember.bulkCreate(guildMemberDefArr).catch(console.error);
+            GuildMember
+                // See: https://github.com/sequelize/sequelize/issues/3131
+                .destroy({where: {}})
+                .then(function ()
+                {
+                    let guildMemberDefArr : Array<{ discord_id : Discord.Snowflake, discord_name : string }> = [];
+                    _.each(msg.guild.members.cache.array(), function (v : Discord.GuildMember)
+                    {
+                        if (v.user.bot)
+                        {
+                            return;
+                        }
+
+                        guildMemberDefArr.push(
+                            {
+                                discord_id  : v.id,
+                                discord_name: v.user.tag,
+                            },
+                        );
+                    });
+                    GuildMember
+                        .bulkCreate(guildMemberDefArr)
+                        .then(function ()
+                        {
+                            // Wait for guild member insertion to complete due foreign key constraints.
+                            VoiceActivity.bulkCreate(voiceLogCp).catch(console.error);
+                        });
+                });
         });
 }

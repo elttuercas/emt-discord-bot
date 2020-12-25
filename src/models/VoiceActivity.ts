@@ -20,14 +20,16 @@ import {
     Model,
     PrimaryKey,
     Table,
-} from 'sequelize-typescript';
+}                    from 'sequelize-typescript';
 import * as Discord  from 'discord.js';
 import {GuildMember} from './GuildMember';
 
 @Table(
     {
-        tableName: 'voice_activity',
-        charset  : 'utf8mb4',
+        tableName : 'voice_activity',
+        charset   : 'utf8mb4',
+        collate   : 'utf8mb4_0900_ai_ci',
+        timestamps: false,
     },
 )
 /**
@@ -84,7 +86,7 @@ export class VoiceActivity extends Model<VoiceActivity>
      * End time of voice log.
      */
     public end_va_ts : Date;
-    @BelongsTo(() => GuildMember)
+    @BelongsTo(() => GuildMember, 'discord_id')
     /**
      * GuildMember object which owns this log.
      */

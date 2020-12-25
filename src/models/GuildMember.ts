@@ -10,14 +10,26 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import {AllowNull, AutoIncrement, Column, DataType, HasMany, Model, PrimaryKey, Table} from 'sequelize-typescript';
-import * as Discord                                                                    from 'discord.js';
+import {
+    AllowNull,
+    AutoIncrement,
+    Column,
+    DataType,
+    HasMany,
+    Model,
+    PrimaryKey,
+    Table,
+    Unique,
+}                   from 'sequelize-typescript';
+import * as Discord from 'discord.js';
 import {VoiceActivity}                                                                 from './VoiceActivity';
 
 @Table(
     {
-        tableName: '',
-        charset  : 'utf8mb4',
+        tableName : 'guild_members',
+        charset   : 'utf8mb4',
+        collate   : 'utf8mb4_0900_ai_ci',
+        timestamps: false,
     },
 )
 /**
@@ -37,12 +49,7 @@ export class GuildMember extends Model<GuildMember>
      */
     public id : bigint;
     @AllowNull(false)
-    @Column
-    /**
-     * The guild the user is a part of, in case they are in several tracked guilds.
-     */
-    public guild_id : Discord.Snowflake;
-    @AllowNull(false)
+    @Unique
     @Column
     /**
      * The ID of the user.
@@ -53,10 +60,10 @@ export class GuildMember extends Model<GuildMember>
     /**
      * Discord tag of the user.
      */
-    public discord_name : string
-    @HasMany(() => VoiceActivity)
+    public discord_name : string;
+    @HasMany(() => VoiceActivity, {sourceKey: 'discord_id'})
     /**
      * The voice logs associated with the user.
      */
-    public voiceLogs : Array<VoiceActivity>
+    public voiceLogs : Array<VoiceActivity>;
 }
