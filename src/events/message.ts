@@ -27,7 +27,7 @@ import CommandFile  from '../types/CommandFile';
  */
 export async function handleEvent(client : Discord.Client, config : AppConfig, cmdObj : { [key : string] : CommandFile }, message : Discord.Message) : Promise<void>
 {
-    if (message.author.bot)
+    if (message.author.bot || message.channel instanceof Discord.DMChannel || message.member === null)
     {
         return;
     }

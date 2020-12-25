@@ -5,7 +5,8 @@
     "author": "Carlos Amores",
     "license": "AGPL-3.0-or-later",
     "repository": {
-        "url": "https://github.com/elttuercas/emt-discord-bot"
+        "type": "git",
+        "url": "git+https://github.com/elttuercas/emt-discord-bot.git"
     },
     "dependencies": {
         "@types/lodash": "^4.14.165",
