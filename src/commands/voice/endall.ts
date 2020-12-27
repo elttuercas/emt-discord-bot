@@ -10,26 +10,29 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord from 'discord.js';
-import AppConfig    from '../types/AppConfig';
+import * as Discord    from 'discord.js';
+import {VoiceActivity} from '../../models/VoiceActivity';
 
 /**
- * Discord ready event handler.
+ * Ends all active voice logs by setting their end time to the time the command is run.
+ *
  * @param client
- * @param config
+ * @param msg
  *
  * @author Carlos Amores
- * {@link https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready}
  */
-export async function handleEvent(client : Discord.Client, config : AppConfig) : Promise<void>
+export async function run(client : Discord.Client, msg : Discord.Message)
 {
-    await client.user?.setPresence(
-        {
-            status  : 'online',
-            activity: {
-                name: 'Event Management',
-                type: 'PLAYING',
+    VoiceActivity
+        .update(
+            {
+                end_va_ts: new Date(),
             },
-        },
-    );
+            {
+                where: {
+                    end_va_ts: new Date(0),
+                },
+            },
+        )
+        .catch(console.error);
 }

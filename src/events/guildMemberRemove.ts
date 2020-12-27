@@ -10,26 +10,28 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord from 'discord.js';
-import AppConfig    from '../types/AppConfig';
+import * as Discord  from 'discord.js';
+import AppConfig     from '../types/AppConfig';
+import {GuildMember} from '../models/GuildMember';
 
 /**
- * Discord ready event handler.
+ * Discord guildMemberRemove event handler.
  * @param client
  * @param config
+ * @param member
  *
  * @author Carlos Amores
- * {@link https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready}
+ * {@link https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-guildMemberRemove}
  */
-export async function handleEvent(client : Discord.Client, config : AppConfig) : Promise<void>
+export async function handleEvent(client : Discord.Client, config : AppConfig, member : Discord.GuildMember)
 {
-    await client.user?.setPresence(
-        {
-            status  : 'online',
-            activity: {
-                name: 'Event Management',
-                type: 'PLAYING',
-            },
-        },
-    );
+    GuildMember
+        .destroy(
+            {
+                where: {
+                    discord_id: member.id
+                }
+            }
+        )
+        .catch(console.error);
 }

@@ -10,26 +10,19 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord from 'discord.js';
-import AppConfig    from '../types/AppConfig';
+import * as Discord    from 'discord.js';
+import * as _          from 'lodash';
 
 /**
- * Discord ready event handler.
+ * TODO: Message command invoker list of members in the requested roles.
+ *
  * @param client
- * @param config
+ * @param msg
+ * @param groupNames
  *
  * @author Carlos Amores
- * {@link https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready}
  */
-export async function handleEvent(client : Discord.Client, config : AppConfig) : Promise<void>
+export async function run(client : Discord.Client, msg : Discord.Message, ...groupNames : Array<string>)
 {
-    await client.user?.setPresence(
-        {
-            status  : 'online',
-            activity: {
-                name: 'Event Management',
-                type: 'PLAYING',
-            },
-        },
-    );
+
 }

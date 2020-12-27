@@ -46,7 +46,7 @@ export async function handleEvent(client : Discord.Client, config : AppConfig, c
 
     if (isCommand)
     {
-        let cmdArgs : Array<string> = message.content.substr(config.prefix.length + commandName.length).split(/\s/);
+        let cmdArgs : Array<string> = message.content.substr(config.prefix.length + commandName.length).trim().split(/\s/);
         cmdObj[commandName].run(client, message, ...cmdArgs).catch(console.error);
     }
     else

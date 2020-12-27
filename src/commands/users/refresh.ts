@@ -16,7 +16,7 @@ import {GuildMember}   from '../../models/GuildMember';
 import {VoiceActivity} from '../../models/VoiceActivity';
 
 /**
- * Refreshes the
+ * Refreshes the list of guild members.
  * @param client
  * @param msg
  *
