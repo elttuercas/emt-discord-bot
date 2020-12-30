@@ -46,7 +46,17 @@ export async function handleEvent(client : Discord.Client, config : AppConfig, c
 
     if (isCommand)
     {
-        let cmdArgs : Array<string> = message.content.substr(config.prefix.length + commandName.length).trim().split(/\s/);
+        let cmdArgs : Array<string> = message.content
+            .substr(config.prefix.length + commandName.length)
+            .trim()
+            /** {@link https://regex101.com/r/gTpMk5/3} */
+            .split(/\s+(?=(?:(?:\\[\\"]|[^\\"])*"(?:\\[\\"]|[^\\"])*")*(?:\\[\\"]|[^\\"])*$)/gm);
+        cmdArgs = _.map(cmdArgs, function (arg : string) : string
+        {
+            /** {@link https://regex101.com/r/wFPxtv/2} */
+            let argWithoutDelimiters : string = _.replace(arg, /((?<!\\)(?:\\{2})*)["]/gm, '$1');
+            return _.replace(argWithoutDelimiters, /\\"/gm, '"');
+        });
         cmdObj[commandName].run(client, message, ...cmdArgs).catch(console.error);
     }
     else
