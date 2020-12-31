@@ -14,7 +14,7 @@ import * as Discord from 'discord.js';
 import * as _       from 'lodash';
 
 /**
- * Command to get a list of users who have at least one of the specified roles.
+ * Command to get a list of users who have all of the specified roles.
  *
  * @param client
  * @param msg
@@ -22,14 +22,14 @@ import * as _       from 'lodash';
  *
  * @author Carlos Amores
  */
-export async function run(client : Discord.Client, msg : Discord.Message, ...roles : Array<string>)
+export async function run(client : Discord.Client, msg : Discord.Message, ...roles : Array<string>) : Promise<void>
 {
-    let lowerGroupNames : Array<string>            = _.map(roles, _.toLower);
-    let membersInRole : Array<Discord.GuildMember> = _.filter(msg.guild.members.cache.array(), (m : Discord.GuildMember) => _.some(m.roles.cache.array(), (r : Discord.Role) => _.includes(lowerGroupNames, _.toLower(r.name))));
+    let lowerRoles : Array<string>                 = _.map(roles, _.toLower);
+    let membersInRole : Array<Discord.GuildMember> = _.filter(msg.guild.members.cache.array(), (m : Discord.GuildMember) => _.every(m.roles.cache.array(), (r : Discord.Role) => _.includes(lowerRoles, _.toLower(r.name))));
 
     let memberList : Discord.MessageEmbed = new Discord.MessageEmbed(
         {
-            title      : 'Users with at least one of the following roles: ' + _.join(roles, ', '),
+            title      : 'Users with all of the following roles: ' + _.join(roles, ', '),
             description: _.map(membersInRole, (m : Discord.GuildMember) => m.displayName).join('\n'),
             hexColor   : '#00ffff',
         },

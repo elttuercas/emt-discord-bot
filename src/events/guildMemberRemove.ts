@@ -29,9 +29,9 @@ export async function handleEvent(client : Discord.Client, config : AppConfig, m
         .destroy(
             {
                 where: {
-                    discord_id: member.id
-                }
-            }
+                    discord_id: member.id,
+                },
+            },
         )
         .catch(console.error);
 }

@@ -12,5 +12,6 @@ import * as Discord from 'discord.js';
 export default interface CommandFile
 {
     run : (client : Discord.Client, msg : Discord.Message, ...args : Array<string>) => Promise<void>;
-    [key: string] : any;
+
+    [key : string] : any;
 }

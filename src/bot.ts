@@ -41,7 +41,7 @@ new Sequelize(
             idle: 10000,
         },
         models  : [__dirname + '/models/*.ts'],
-        logging: false
+        logging : false,
     },
 );
 

@@ -51,7 +51,7 @@ export async function handleEvent(client : Discord.Client, config : AppConfig, c
             .trim()
             /** {@link https://regex101.com/r/gTpMk5/3} */
             .split(/\s+(?=(?:(?:\\[\\"]|[^\\"])*"(?:\\[\\"]|[^\\"])*")*(?:\\[\\"]|[^\\"])*$)/gm);
-        cmdArgs = _.map(cmdArgs, function (arg : string) : string
+        cmdArgs                     = _.map(cmdArgs, function (arg : string) : string
         {
             /** {@link https://regex101.com/r/wFPxtv/2} */
             let argWithoutDelimiters : string = _.replace(arg, /((?<!\\)(?:\\{2})*)["]/gm, '$1');

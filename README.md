@@ -2,7 +2,7 @@
 
 Discord bot intended to work in tandem with the IPS EMT application and the standalone EMT application.
 
-- Permissions: 29568022  
+- Permissions: 29568022
     - Manage Channels
     - Kick Members
     - Ban Members

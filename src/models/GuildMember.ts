@@ -20,9 +20,9 @@ import {
     PrimaryKey,
     Table,
     Unique,
-}                   from 'sequelize-typescript';
-import * as Discord from 'discord.js';
-import {VoiceActivity}                                                                 from './VoiceActivity';
+}                      from 'sequelize-typescript';
+import * as Discord    from 'discord.js';
+import {VoiceActivity} from './VoiceActivity';
 
 @Table(
     {
