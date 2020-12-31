@@ -12,7 +12,8 @@
 
 import {
     AllowNull,
-    AutoIncrement, BelongsTo,
+    AutoIncrement,
+    BelongsTo,
     Column,
     DataType,
     Default,
