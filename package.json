@@ -1,7 +1,7 @@
 {
     "name": "emt-discord-bot",
     "version": "1.0.0",
-    "description": "Discord activity monitoring bot which stores useful data about statistics ",
+    "description": "Discord activity monitoring bot which collects data to generate meaningful statistics and enable other integrations.",
     "author": "Carlos Amores",
     "license": "AGPL-3.0-or-later",
     "repository": {

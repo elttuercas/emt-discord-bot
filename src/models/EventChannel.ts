@@ -22,10 +22,11 @@ import {
     PrimaryKey,
     Table,
     Unique,
-}                      from 'sequelize-typescript';
-import * as Discord    from 'discord.js';
-import {GuildMember}   from './GuildMember';
-import {VoiceActivity} from './VoiceActivity';
+}                        from 'sequelize-typescript';
+import * as Discord      from 'discord.js';
+import {GuildMember}     from './GuildMember';
+import {VoiceActivity}   from './VoiceActivity';
+import {EventSubChannel} from './EventSubChannel';
 
 @Table(
     {
@@ -88,4 +89,9 @@ export class EventChannel extends Model<EventChannel>
      * The GuildMember object which represents the owner of the temporary channel.
      */
     public owner : GuildMember;
+    @HasMany(() => EventSubChannel, 'parent_id')
+    /**
+     * All of the sub channels associated with the event channel.
+     */
+    public subChannels : Array<EventSubChannel>;
 }
