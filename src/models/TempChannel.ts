@@ -51,6 +51,12 @@ export class TempChannel extends Model<TempChannel>
      * Row UID.
      */
     public id : bigint;
+    @AllowNull(true)
+    @Column
+    /**
+     * The parent of the temporary channel if this channel is an event sub channel.
+     */
+    public parent_id : Discord.Snowflake | null;
     @AllowNull(false)
     @Unique
     @Column
@@ -77,6 +83,18 @@ export class TempChannel extends Model<TempChannel>
      * The ID of the category under which the channel is located.
      */
     public cat_id : Discord.Snowflake;
+    @AllowNull(false)
+    @Column
+    /**
+     * Whether this temporary channel is an event channel.
+     */
+    public event_channel : boolean;
+    @AllowNull(false)
+    @Column
+    /**
+     * Whether this temporary channel is an event sub channel.
+     */
+    public event_sub_channel : boolean;
     @HasMany(() => VoiceActivity, {sourceKey: 'channel_id'})
     /**
      * The voice logs associated with this channel.
@@ -87,4 +105,23 @@ export class TempChannel extends Model<TempChannel>
      * The GuildMember object which represents the owner of the temporary channel.
      */
     public owner : GuildMember;
+
+    /**
+     * Retrieve the sub channels of this temporary channel or null if it is not an event channel.
+     */
+    public getSubChannels() : Promise<Array<TempChannel>> | null
+    {
+        if (!this.event_channel)
+        {
+            return null;
+        }
+
+        return TempChannel.findAll(
+            {
+                where: {
+                    parent_id: this.channel_id,
+                },
+            },
+        );
+    }
 }

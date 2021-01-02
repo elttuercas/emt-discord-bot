@@ -10,15 +10,16 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord    from 'discord.js';
-import * as fs         from 'fs';
-import * as _          from 'lodash';
-import {Sequelize}     from 'sequelize-typescript';
-import AppConfig       from './types/AppConfig';
-import EventFile       from './types/EventFile';
-import CommandFile     from './types/CommandFile';
-import {VoiceActivity} from './models/VoiceActivity';
-import {GuildMember}   from './models/GuildMember';
+import * as Discord      from 'discord.js';
+import * as fs           from 'fs';
+import * as _            from 'lodash';
+import {Sequelize}       from 'sequelize-typescript';
+import AppConfig         from './types/AppConfig';
+import EventFile         from './types/EventFile';
+import CommandFile       from './types/CommandFile';
+import {VoiceActivity}   from './models/VoiceActivity';
+import {GuildMember}     from './models/GuildMember';
+import {TempChannel}     from './models/TempChannel';
 
 const fsReadRecursive = require('fs-readdir-recursive');
 const client          = new Discord.Client();
@@ -81,3 +82,4 @@ _.each(fs.readdirSync('./events/'), function (file : string)
 client.login(config.token).catch(console.error);
 GuildMember.sync().catch(console.error);
 VoiceActivity.sync().catch(console.error);
+TempChannel.sync().catch(console.error);
