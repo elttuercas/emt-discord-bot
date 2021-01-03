@@ -108,12 +108,13 @@ export class TempChannel extends Model<TempChannel>
 
     /**
      * Retrieve the sub channels of this temporary channel or null if it is not an event channel.
+     * @throws Error When the method is called on a non-event channel record.
      */
-    public getSubChannels() : Promise<Array<TempChannel>> | null
+    public async getSubChannels() : Promise<Array<TempChannel>>
     {
         if (!this.event_channel)
         {
-            return null;
+            throw new Error('TempChannel::getSubChannels cannot be called on a non-event channel.');
         }
 
         return TempChannel.findAll(
