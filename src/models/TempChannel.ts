@@ -107,17 +107,37 @@ export class TempChannel extends Model<TempChannel>
     public owner : GuildMember;
 
     /**
-     * Retrieve the sub channels of this temporary channel or null if it is not an event channel.
+     * Retrieve the sub channels of this temporary event channel.
      * @throws Error When the method is called on a non-event channel record.
      */
     public async getSubChannels() : Promise<Array<TempChannel>>
     {
         if (!this.event_channel)
         {
-            throw new Error('TempChannel::getSubChannels cannot be called on a non-event channel.');
+            throw new Error('TempChannel::getSubChannels cannot be called on a non-event channel record.');
         }
 
         return TempChannel.findAll(
+            {
+                where: {
+                    parent_id: this.channel_id,
+                },
+            },
+        );
+    }
+
+    /**
+     * Delete all the sub channels associated with this temporary event channel.
+     * @throws Error When the method is called on a non-event channel record.
+     */
+    public async deleteSubChannels() : Promise<number>
+    {
+        if (!this.event_channel)
+        {
+            throw new Error('TempChannel::deleteSubChannels cannot be called on a non-event channel record.');
+        }
+
+        return TempChannel.destroy(
             {
                 where: {
                     parent_id: this.channel_id,

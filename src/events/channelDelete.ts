@@ -65,16 +65,8 @@ export async function handleEvent(client : Discord.Client, config : AppConfig, c
                         {
                             c.delete().catch(console.error);
                         });
+                        ch.deleteSubChannels().catch(console.error);
                     })
-                    .catch(console.error);
-                TempChannel
-                    .destroy(
-                        {
-                            where: {
-                                parent_id: ch.channel_id,
-                            },
-                        },
-                    )
                     .catch(console.error);
             }
 
