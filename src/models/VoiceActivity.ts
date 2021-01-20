@@ -24,6 +24,7 @@ import {
 }                    from 'sequelize-typescript';
 import * as Discord  from 'discord.js';
 import {GuildMember} from './GuildMember';
+import {TempChannel} from './TempChannel';
 
 @Table(
     {
@@ -40,7 +41,7 @@ import {GuildMember} from './GuildMember';
  *
  * @author Carlos Amores
  */
-export class VoiceActivity extends Model<VoiceActivity>
+export class VoiceActivity extends Model
 {
     @AutoIncrement
     @PrimaryKey
@@ -63,6 +64,7 @@ export class VoiceActivity extends Model<VoiceActivity>
      */
     public discord_name : string;
     @AllowNull(false)
+    @ForeignKey(() => TempChannel)
     @Column
     /**
      * The ID of the channel where the user stayed for the duration of the voice log.
@@ -92,4 +94,9 @@ export class VoiceActivity extends Model<VoiceActivity>
      * GuildMember object which owns this log.
      */
     public member : GuildMember;
+    @BelongsTo(() => TempChannel, {onDelete: 'NO ACTION', foreignKey: 'channel_id'})
+    /**
+     * TempChannel object in which the voice log took place.
+     */
+    public channel : TempChannel;
 }

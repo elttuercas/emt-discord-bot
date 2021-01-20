@@ -10,16 +10,16 @@
  *         _\///////////////__\///______________\///________\///________
  */
 
-import * as Discord      from 'discord.js';
-import * as fs           from 'fs';
-import * as _            from 'lodash';
-import {Sequelize}       from 'sequelize-typescript';
-import AppConfig         from './types/AppConfig';
-import EventFile         from './types/EventFile';
-import CommandFile       from './types/CommandFile';
-import {VoiceActivity}   from './models/VoiceActivity';
-import {GuildMember}     from './models/GuildMember';
-import {TempChannel}     from './models/TempChannel';
+import * as Discord    from 'discord.js';
+import * as fs         from 'fs';
+import * as _          from 'lodash';
+import {Sequelize}     from 'sequelize-typescript';
+import AppConfig       from './types/AppConfig';
+import EventFile       from './types/EventFile';
+import CommandFile     from './types/CommandFile';
+import {VoiceActivity} from './models/VoiceActivity';
+import {GuildMember}   from './models/GuildMember';
+import {TempChannel}   from './models/TempChannel';
 
 const fsReadRecursive = require('fs-readdir-recursive');
 const client          = new Discord.Client();
@@ -29,22 +29,29 @@ let config : AppConfig = new AppConfig();
 _.extend(config, require('../config.json'), require('../private-config.json'));
 
 // Create database connection.
-new Sequelize(
-    {
-        database: config.mysql_settings.database,
-        dialect : 'mysql',
-        username: config.mysql_settings.user,
-        password: config.mysql_settings.password,
-        port    : config.mysql_settings.port,
-        pool    : {
-            max : 10,
-            min : 0,
-            idle: 10000,
+try
+{
+    new Sequelize(
+        {
+            database: config.mysql_settings.database,
+            dialect : 'mysql',
+            username: config.mysql_settings.user,
+            password: config.mysql_settings.password,
+            port    : config.mysql_settings.port,
+            pool    : {
+                max : 10,
+                min : 0,
+                idle: 10000,
+            },
+            models  : [__dirname + '/models/*.ts'],
+            logging : true,
         },
-        models  : [__dirname + '/models/*.ts'],
-        logging : false,
-    },
-);
+    );
+}
+catch (e : any)
+{
+    console.error(e);
+}
 
 let commandsObj : { [key : string] : CommandFile } = {};
 _.each(fsReadRecursive('./commands/'), function (file : string)
@@ -81,5 +88,5 @@ _.each(fs.readdirSync('./events/'), function (file : string)
 // Login and ensure the database is in a known state.
 client.login(config.token).catch(console.error);
 GuildMember.sync().catch(console.error);
-VoiceActivity.sync().catch(console.error);
 TempChannel.sync().catch(console.error);
+VoiceActivity.sync().catch(console.error);

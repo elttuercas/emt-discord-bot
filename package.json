@@ -11,14 +11,13 @@
     "dependencies": {
         "@types/lodash": "^4.14.167",
         "@types/node": "^14.14.19",
-        "@types/sequelize": "^4.28.9",
         "discord.js": "^12.5.1",
         "fs-readdir-recursive": "^1.1.0",
         "lodash": "^4.17.20",
         "mysql2": "^2.2.5",
         "reflect-metadata": "^0.1.13",
-        "sequelize": "^5.22.3",
-        "sequelize-typescript": "1.1.0"
+        "sequelize": "^6.4.0",
+        "sequelize-typescript": "^2.0.0"
     },
     "devDependencies": {
         "sequelize-cli": "^6.2.0"

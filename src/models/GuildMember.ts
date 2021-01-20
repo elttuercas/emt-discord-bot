@@ -39,7 +39,7 @@ import {VoiceActivity} from './VoiceActivity';
  *
  * @author Carlos Amores
  */
-export class GuildMember extends Model<GuildMember>
+export class GuildMember extends Model
 {
     @AutoIncrement
     @PrimaryKey

@@ -42,7 +42,7 @@ import {GuildMember}   from './GuildMember';
  *
  * @author Carlos Amores
  */
-export class TempChannel extends Model<TempChannel>
+export class TempChannel extends Model
 {
     @AutoIncrement
     @PrimaryKey
@@ -51,6 +51,13 @@ export class TempChannel extends Model<TempChannel>
      * Row UID.
      */
     public id : bigint;
+    @AllowNull(false)
+    @ForeignKey(() => GuildMember)
+    @Column
+    /**
+     * The user ID of the person who currently owns the temporary channel.
+     */
+    public discord_id : Discord.Snowflake;
     @AllowNull(true)
     @Column
     /**
@@ -70,13 +77,6 @@ export class TempChannel extends Model<TempChannel>
      * The name of the temporary channel.
      */
     public channel_name : string;
-    @AllowNull(false)
-    @ForeignKey(() => GuildMember)
-    @Column
-    /**
-     * The user ID of the person who currently owns the temporary channel.
-     */
-    public owner_id : Discord.Snowflake;
     @AllowNull(false)
     @Column
     /**
@@ -100,11 +100,11 @@ export class TempChannel extends Model<TempChannel>
      * The voice logs associated with this channel.
      */
     public voiceLogs : Array<VoiceActivity>;
-    @BelongsTo(() => GuildMember, 'owner_id')
+    @BelongsTo(() => GuildMember, 'discord_id')
     /**
      * The GuildMember object which represents the owner of the temporary channel.
      */
-    public owner : GuildMember;
+    public member : GuildMember;
 
     /**
      * Retrieve the sub channels of this temporary event channel.
